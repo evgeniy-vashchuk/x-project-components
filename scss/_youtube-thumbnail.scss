@@ -1,0 +1,40 @@
+.video-thumbnail {
+	cursor: pointer;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-color: #000;
+
+	.-hide {
+		display: none;
+	}
+
+	&-icon {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 10;
+
+		&.-youtube-icon {
+			width: 68px;
+			height: 48px;
+
+			.ytp-large-play-button-bg {
+				transition: fill .1s cubic-bezier(0.4,0.0,1,1),fill-opacity .1s cubic-bezier(0.4,0.0,1,1);
+			}
+		}
+	}
+
+	&:hover {
+		.video-thumbnail-icon {
+			&.-youtube-icon {
+				.ytp-large-play-button-bg {
+					transition: fill .1s cubic-bezier(0.0,0.0,0.2,1),fill-opacity .1s cubic-bezier(0.0,0.0,0.2,1);
+					fill: #f00;
+					fill-opacity: 1;
+				}
+			}
+		}
+	}
+}

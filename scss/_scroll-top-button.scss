@@ -1,0 +1,33 @@
+$scroll-top-btn-size: 50px;
+$scroll-top-btn-bg: #26263F;
+
+.scroll-top-btn {
+	position: fixed;
+	bottom: 0;
+	right: 50px;
+	z-index: 100;
+	width: $scroll-top-btn-size;
+	height: $scroll-top-btn-size;
+	border: none;
+	cursor: pointer;
+	background-color: #26263F;
+	transition: 0.3s;
+	transform: translate(0, 100%);
+
+	&-icon {
+		font-size: 35px;
+		color: #fff;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	&:hover {
+		background-color: lighten($scroll-top-btn-bg, 5%);
+	}
+
+	&.-show {
+		transform: translate(0, 0);
+	}
+}
