@@ -24,4 +24,4 @@
 
 <h2>Components</h2>
 
-<p>All components are presented here - <a href="https://inkogn1to.github.io/x-project-components/index.html">X-Project Components</a></p>
+<p>All components are presented here - <a href="https://inkogn1to.github.io/x-project-components/index.html"><strong>X-Project Components</strong></a></p>
