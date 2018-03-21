@@ -1,5 +1,5 @@
 <p>
-	<a href="https://inkogn1to.github.io/x-project-components/index.html" target="blank"><img src="https://raw.githubusercontent.com/inkogn1to/x-project-components/master/logo.jpg" alt="X-project "></a>
+	<a href="https://inkogn1to.github.io/x-project-components/index.html"><img src="https://raw.githubusercontent.com/inkogn1to/x-project-components/master/logo.jpg" alt="X-project "></a>
 </p>
 
 <h2>About</h2>
