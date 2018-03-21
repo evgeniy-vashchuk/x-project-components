@@ -21,3 +21,7 @@
 <p>2) Also you should have SASS compiler (for example <a href="https://prepros.io/"><strong>Prepros</strong></a> or <a href="https://gulpjs.com/"><strong>Gulp</strong></a>) for compiling your CSS.</p>
 
 <p>3) Find the right component and copy it to your project.</p>
+
+<h2>Components</h2>
+
+<p>All components are presented here - <a href="https://inkogn1to.github.io/x-project-components/index.html">X-Project Components</a></p>
