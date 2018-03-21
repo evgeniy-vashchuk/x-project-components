@@ -10,7 +10,7 @@ $scroll-top-btn-bg: #26263F;
 	height: $scroll-top-btn-size;
 	border: none;
 	cursor: pointer;
-	background-color: #26263F;
+	background-color: $scroll-top-btn-bg;
 	transition: 0.3s;
 	transform: translate(0, 100%);
 
