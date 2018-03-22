@@ -8,16 +8,20 @@
 		// SMALL HEADER AFTER SCROLL =================================
 		// =========================
 
-		$(window).on('scroll', function() {
-			// distance after which header becoming small
-			var distanceY = 1;
+		// distance after which header becoming small
+		var distanceY = 1;
 
+		$(window).on('scroll', function() {
 			if ($(this).scrollTop() > distanceY) {
 				$('.js-header').addClass('-small-header');
 			} else {
 				$('.js-header').removeClass('-small-header');
 			}
 		})
+
+		if ($(document).scrollTop() > distanceY) {
+			$('.js-header').addClass('-small-header');
+		}
 
 		// =========================
 		// STICKY FOOTER =================================
@@ -65,25 +69,31 @@
 		// SCROLL TO ELEMENT =================================
 		// =========================
 
-		// SCROLL TO ELEMENT
-		$('a[href^="go-to:"]').on('click', function(e) {
+		var animationComplete = true;
+
+		$('a[href^="#"]:not(.js-no-scroll)').on('click', function(e) {
 			e.preventDefault();
 
 			// height of header (for offset)
 			var headerOffset = $('.js-header').outerHeight(),
 					idOfElement = $(this).attr('href');
 
-			if (idOfElement.substring(0, 6) === 'go-to:') {
-
-				idOfElement = '#' + idOfElement.slice(6);
-
-				if (headerOffset === undefined) {
-					headerOffset = 0;
-				}
-
-				var top = $(idOfElement).offset().top - headerOffset;
-				$('body,html').animate({scrollTop: top}, 1000);
+			if (headerOffset === undefined) {
+				headerOffset = 0;
 			}
+
+			var top = $(idOfElement).offset().top - headerOffset;
+
+			if (animationComplete) {
+				animationComplete = false;
+
+				$('body,html').animate({
+					scrollTop: top
+				}, 1000 ).promise().done(function(){
+					animationComplete = true;
+				});
+			}
+
 		});
 
 		// =========================
