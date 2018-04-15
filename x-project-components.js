@@ -2,6 +2,24 @@
 
 'use strict';
 
+// =========================
+// PRELOADER =================================
+// =========================
+
+// hide preloader by click
+$('.js-preloader').on('click', function() {
+	$(".js-preloader").fadeOut('slow');
+});
+
+$(window).on("load", function() {
+
+	// hide preloader
+	setTimeout(function() {
+		$(".js-preloader").fadeOut('slow');
+	}, 1000);
+
+});
+
 $(document).ready(function() {
 
 	// =========================
@@ -116,14 +134,22 @@ $(document).ready(function() {
 	var widthOfScrollbar;
 
 	function getScrollBarWidth() {
-		var $outer = $('<div>').css({visibility: 'hidden', width: 100, overflow: 'scroll'}).appendTo('body'),
-			widthWithScroll = $('<div>').css({width: '100%'}).appendTo($outer).outerWidth();
-		$outer.remove();
-		widthOfScrollbar = 100 - widthWithScroll;
-		return 100 - widthWithScroll;
+		if (window.innerWidth > $(window).width()) {
+			var $outer = $('<div>').css({visibility: 'hidden', width: 100, overflow: 'scroll'}).appendTo('body'),
+					widthWithScroll = $('<div>').css({width: '100%'}).appendTo($outer).outerWidth();
+			$outer.remove();
+			widthOfScrollbar = 100 - widthWithScroll;
+			return 100 - widthWithScroll;
+		} else {
+			return widthOfScrollbar = 0;
+		}
 	};
 
 	getScrollBarWidth();
+
+	$(window).resize(function() {
+		getScrollBarWidth();
+	});
 
 	// =========================
 	// STANDARD GOOGLE MAP =================================
