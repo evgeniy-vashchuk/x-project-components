@@ -13,7 +13,7 @@ $checkbox-active-bg-color: #26263F;
 	cursor: pointer;
 	user-select: none;
 
-	&-checkmark {
+	&__checkmark {
 		position: absolute;
 		top: 50%;
 		left: 0;
@@ -24,7 +24,7 @@ $checkbox-active-bg-color: #26263F;
 		transition: 0.3s;
 	}
 
-	&-checkmark-icon {
+	&__icon {
 		position: absolute;
 		top: 50%;
 		left: 50%;
@@ -36,7 +36,7 @@ $checkbox-active-bg-color: #26263F;
 		transition: 0.2s;
 	}
 
-	&-input {
+	&__input {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -45,10 +45,10 @@ $checkbox-active-bg-color: #26263F;
 
 		// checked styles
 		&:checked + {
-			.custom-checkbox-checkmark {
+			.custom-checkbox__checkmark {
 				background-color: $checkbox-active-bg-color;
 
-				.custom-checkbox-checkmark-icon {
+				.custom-checkbox__icon {
 					opacity: 1;
 				}
 			}
@@ -56,15 +56,15 @@ $checkbox-active-bg-color: #26263F;
 
 		// disabled styles
 		&:disabled + {
-			.custom-checkbox-checkmark {
+			.custom-checkbox__checkmark {
 				background-color: rgba($checkbox-bg-color, 0.5);
 			}
 		}
 	}
 
 	&:hover {
-		.custom-checkbox-input:not(:disabled):not(:checked) + {
-			.custom-checkbox-checkmark {
+		.custom-checkbox__input:not(:disabled):not(:checked) + {
+			.custom-checkbox__checkmark {
 				background-color: lighten($checkbox-bg-color, 10%);
 			}
 		}
@@ -87,7 +87,7 @@ $radio-active-bg-color: #26263F;
 	cursor: pointer;
 	user-select: none;
 
-	&-checkmark {
+	&__checkmark {
 		position: absolute;
 		top: 50%;
 		left: 0;
@@ -99,7 +99,7 @@ $radio-active-bg-color: #26263F;
 		transition: 0.3s;
 	}
 
-	&-checkmark-icon {
+	&__icon {
 		position: absolute;
 		top: 50%;
 		left: 50%;
@@ -111,7 +111,7 @@ $radio-active-bg-color: #26263F;
 		opacity: 0;
 	}
 
-	&-input {
+	&__input {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -120,10 +120,10 @@ $radio-active-bg-color: #26263F;
 
 		// checked styles
 		&:checked + {
-			.custom-radio-checkmark {
+			.custom-radio__checkmark {
 				background-color: $radio-active-bg-color;
 
-				.custom-radio-checkmark-icon {
+				.custom-radio__icon {
 					opacity: 1;
 				}
 			}
@@ -131,15 +131,15 @@ $radio-active-bg-color: #26263F;
 
 		// disabled styles
 		&:disabled + {
-			.custom-radio-checkmark {
+			.custom-radio__checkmark {
 				background-color: rgba($radio-bg-color, 0.5);
 			}
 		}
 	}
 
 	&:hover {
-		.custom-radio-input:not(:disabled):not(:checked) + {
-			.custom-radio-checkmark {
+		.custom-radio__input:not(:disabled):not(:checked) + {
+			.custom-radio__checkmark {
 				background-color: lighten($radio-bg-color, 10%);
 			}
 		}

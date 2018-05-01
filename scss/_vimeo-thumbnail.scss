@@ -1,45 +1,52 @@
 .video-thumbnail {
 	cursor: pointer;
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
 	background-color: #000;
 
 	.-hide {
 		display: none;
 	}
 
-	&-icon {
+	&__overlay {
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
 		z-index: 10;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
 
-		&.-vimeo-icon {
-			width: 65px;
-			height: 40px;
-			transition: opacity 250ms ease-out,background-color 40ms,color 40ms;
-			background: rgba(23,35,34,.75);
-			border-radius: .5em;
-
-			svg {
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				width: 20px;
-				height: 20px;
+		&:hover {
+			.vimeo-icon {
+				background-color: #3CAEF2;
 			}
 		}
 	}
 
-	&:hover {
-		.video-thumbnail-icon {
+	&__icon {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+}
 
-			&.-vimeo-icon {
-				background-color: #3CAEF2;
-			}
-		}
+.vimeo-icon {
+	width: 65px;
+	height: 40px;
+	transition: opacity 250ms ease-out,background-color 40ms,color 40ms;
+	background: rgba(23,35,34,.75);
+	border-radius: .5em;
+
+	svg {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 20px;
+		height: 20px;
 	}
 }

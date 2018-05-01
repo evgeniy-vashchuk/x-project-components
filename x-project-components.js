@@ -8,19 +8,56 @@
 
 // hide preloader by click
 $('.js-preloader').on('click', function() {
-	$(".js-preloader").fadeOut('slow');
+	$('.js-preloader').fadeOut('slow');
 });
 
-$(window).on("load", function() {
+$(window).on('load', function() {
 
 	// hide preloader
 	setTimeout(function() {
-		$(".js-preloader").fadeOut('slow');
+		$('.js-preloader').fadeOut('slow');
 	}, 1000);
 
 });
 
 $(document).ready(function() {
+
+	// =========================
+	// SHUFFLE FILTER =================================
+	// =========================
+
+	function filterInit(filterContainer) {
+
+		if (filterContainer.length) {
+			var filterMainContainer = filterContainer,
+					filterContent = filterMainContainer.find('.filter-content'),
+					filterNav = filterMainContainer.find('.filter-nav'),
+					filterCategoryName = '',
+					shuffle = window.shuffle;
+
+			var myShuffle = new Shuffle(filterContent, {
+				speed: 400,
+				easing: 'ease',
+			});
+
+			myShuffle.update();
+
+			// filtering by click
+			filterNav.find('a').on('click', function() {
+
+				filterNav.find('a').removeClass('-active');
+				$(this).addClass('-active');
+				filterCategoryName = $(this).attr('data-group');
+
+				myShuffle.filter(filterCategoryName, shuffle);
+
+				myShuffle.update();
+
+			});
+		}
+	}
+
+	filterInit($('.js-filter-container'));
 
 	// =========================
 	// SMALL HEADER AFTER SCROLL =================================
@@ -57,7 +94,7 @@ $(document).ready(function() {
 
 	stickyFooter();
 
-	$(window).resize(function() {
+	$(window).on('resize', function() {
 		stickyFooter();
 	});
 
@@ -147,7 +184,7 @@ $(document).ready(function() {
 
 	getScrollBarWidth();
 
-	$(window).resize(function() {
+	$(window).on('resize', function() {
 		getScrollBarWidth();
 	});
 
@@ -189,7 +226,7 @@ $(document).ready(function() {
 			// animation: google.maps.Animation.BOUNCE,
 
 			// OPTIONAL - text on marker hover
-			// title:"text on hover",
+			// title: 'text on hover',
 
 			// OPTIONAL - custom icon from png or svg
 			// icon: icon
@@ -211,7 +248,7 @@ $(document).ready(function() {
 		});*/
 
 		// close info window after click anywhere on the map
-		google.maps.event.addListener(map, "click", function() {
+		google.maps.event.addListener(map, 'click', function() {
 			infoWindow.close();
 		});
 
@@ -226,7 +263,7 @@ $(document).ready(function() {
 	// =========================
 
 	function initMapMultipleMarkers() {
-		var map = new google.maps.Map(document.getElementById("js-map-multiple-markers"), {
+		var map = new google.maps.Map(document.getElementById('js-map-multiple-markers'), {
 			disableDefaultUI: true,
 			zoomControl: true,
 			fullscreenControl: true,
@@ -240,26 +277,26 @@ $(document).ready(function() {
 			{
 				lat: 40.679680,
 				lng: -73.942175,
-				name: "Name 1",
-				address:"Address 1"
+				name: 'Name 1',
+				address: 'Address 1'
 			},
 			{
 				lat: 40.729391,
 				lng: -74.076758,
-				name: "Name 2",
-				address:"Address 2"
+				name: 'Name 2',
+				address: 'Address 2'
 			},
 			{
 				lat: 40.745260,
 				lng: -73.997794,
-				name: "Name 3",
-				address:"Address 3"
+				name: 'Name 3',
+				address: 'Address 3'
 			}
 		];
 
 		var infoWindow = new google.maps.InfoWindow();
 
-		google.maps.event.addListener(map, "click", function() {
+		google.maps.event.addListener(map, 'click', function() {
 			infoWindow.close();
 		});
 
@@ -289,7 +326,7 @@ $(document).ready(function() {
 				title: name
 			});
 
-			google.maps.event.addListener(marker, "click", function() {
+			google.maps.event.addListener(marker, 'click', function() {
 				var contentString = '<div class="infowindow">' +
 															'<h5>' + name + '</h5>' +
 															'<p>' + address + '</p>' +
@@ -310,19 +347,23 @@ $(document).ready(function() {
 	// =========================
 
 	// 1) add thumbnail
-	$(".js-youtube-video-thumbnail").each(function() {
+	$('.js-youtube-video-thumbnail').each(function() {
 		var youtubeVideoID = $(this).children('iframe').attr('src');
-		youtubeVideoID = youtubeVideoID.split('/').pop();
-		$(this).css("background-image", "url(https://img.youtube.com/vi/" + youtubeVideoID + "/sddefault.jpg)")
+				youtubeVideoID = youtubeVideoID.split('/').pop();
+
+		$(this).children('.video-thumbnail__overlay').css('background-image', 'url(https://img.youtube.com/vi/' + youtubeVideoID + '/sddefault.jpg)');
 	});
+
 	// 2) on click play iframe
 	$('.js-youtube-video-thumbnail').on('click' , function() {
 		var $this = $(this);
-		$this.children("iframe")[0].src += "?autoplay=1";
+
+		$this.children('iframe')[0].src += '?autoplay=1';
+		$this.children('iframe').removeClass('-hide');
+
 		setTimeout(function() {
-			$this.children(".video-thumbnail-icon").addClass('-hide');
-			$this.children("iframe").removeClass('-hide');
-		}, 500);
+			$this.children('.video-thumbnail__overlay').addClass('-hide');
+		}, 300);
 	});
 
 	// =========================
@@ -330,23 +371,26 @@ $(document).ready(function() {
 	// =========================
 
 	// 1) add thumbnail
-	$(".js-vimeo-video-thumbnail").each(function() {
-		var $this = $(this);
-		var vimeoVideoID = $this.children('iframe').attr('src');
-		vimeoVideoID = vimeoVideoID.split('/').pop();
-		$.getJSON('https://www.vimeo.com/api/v2/video/' + vimeoVideoID + '.json?callback=?', { format: "json" }, function (data) {
+	$('.js-vimeo-video-thumbnail').each(function() {
+		var $this = $(this),
+				vimeoVideoID = $this.children('iframe').attr('src').split('/').pop();
+
+		$.getJSON('https://www.vimeo.com/api/v2/video/' + vimeoVideoID + '.json?callback=?', { format: 'json' }, function (data) {
 			var thumbnailImg = data[0].thumbnail_large;
-			$this.css("background-image", "url(" + thumbnailImg + ")");
+			$this.children('.video-thumbnail__overlay').css('background-image', 'url(' + thumbnailImg + ')');
 		});
 	});
+
 	// 2) on click play iframe
 	$('.js-vimeo-video-thumbnail').on('click' , function() {
 		var $this = $(this);
-		$this.children("iframe")[0].src += "?autoplay=1";
+
+		$this.children('iframe').removeClass('-hide');
+		$this.children('iframe')[0].src += '?autoplay=1';
+
 		setTimeout(function() {
-			$this.children(".video-thumbnail-icon").addClass('-hide');
-			$this.children("iframe").removeClass('-hide');
-		}, 500);
+			$this.children('.video-thumbnail__overlay').addClass('-hide');
+		}, 300);
 	});
 
 });
