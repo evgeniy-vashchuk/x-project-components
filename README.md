@@ -4,7 +4,8 @@
 
 <h2>About</h2>
 
-<p><strong>X-Project Components</strong> - is a collection of most useful components for page layout. For each component are presented description and code examples with the help of which you can easily understand and apply the right component on your website. Every component is tested for cross-browser compatibility and works in the latest versions of all popular browsers. In X-Project Components all css code was written by <strong>SASS</strong> (with SCSS syntax) and all javascript code with the use of a library <strong>jQuery</strong>.</p>
+<p><strong>X-Project Components</strong> - is a collection of most useful components for page layout. For each component are presented description and code examples with the help of which you can easily understand and apply the right component on your website. In X-Project Components all css code was written by <strong><a href="https://sass-lang.com/" target="_blank">SASS</a></strong> (with SCSS syntax) and all javascript code with the use of a library <strong><a href="https://jquery.com/" target="_blank">jQuery</a></strong>.</p>
+<p>Every component are checked for validity through <strong><a href="https://validator.w3.org/" target="_blank">validator.w3.org</a></strong>, tested for сross-browser compatibility through <a href="https://www.browserstack.com" target="_blank"><strong>browserstack.com</strong></a>, and works in the latest versions of all popular browsers (including IE11).</p>
 
 <h2>How to use</h2>
 
