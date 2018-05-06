@@ -1,5 +1,6 @@
 // CUSTOM CHECKBOX
 
+$checkbox-checkmark-size: 25px;
 $checkbox-bg-color: #4C4E6C;
 $checkbox-active-bg-color: #26263F;
 
@@ -18,8 +19,8 @@ $checkbox-active-bg-color: #26263F;
 		top: 50%;
 		left: 0;
 		transform: translate(0, -50%);
-		width: 25px;
-		height: 25px;
+		width: $checkbox-checkmark-size;
+		height: $checkbox-checkmark-size;
 		background-color: $checkbox-bg-color;
 		transition: 0.3s;
 	}
@@ -69,11 +70,11 @@ $checkbox-active-bg-color: #26263F;
 			}
 		}
 	}
-
 }
 
 // CUSTOM RADIO
 
+$radio-checkmark-size: 25px;
 $radio-bg-color: #4C4E6C;
 $radio-active-bg-color: #26263F;
 
@@ -92,8 +93,8 @@ $radio-active-bg-color: #26263F;
 		top: 50%;
 		left: 0;
 		transform: translate(0, -50%);
-		width: 25px;
-		height: 25px;
+		width: $radio-checkmark-size;
+		height: $radio-checkmark-size;
 		border-radius: 50%;
 		background-color: $radio-bg-color;
 		transition: 0.3s;
@@ -144,5 +145,4 @@ $radio-active-bg-color: #26263F;
 			}
 		}
 	}
-
 }

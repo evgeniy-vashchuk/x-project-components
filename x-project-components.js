@@ -123,7 +123,7 @@ $(document).ready(function() {
 		if (scrollingComplete) {
 			scrollingComplete = false;
 
-			$('body,html').animate({
+			$('body, html').animate({
 				scrollTop: 0
 			}, 1000 ).promise().done(function() {
 				scrollingComplete = true;
@@ -155,7 +155,7 @@ $(document).ready(function() {
 		if (animationComplete) {
 			animationComplete = false;
 
-			$('body,html').animate({
+			$('body, html').animate({
 				scrollTop: top
 			}, 1000 ).promise().done(function() {
 				animationComplete = true;
