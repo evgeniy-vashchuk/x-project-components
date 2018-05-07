@@ -24,6 +24,13 @@
 
 <p>3) Find the right component and copy it to your project.</p>
 
+<h2>Changelog</h2>
+
+| Changes | Date |
+| ----- | ----- |
+| Added shuffle filter component | 01.05.2018 |
+| Added preloader component | 15.04.2018 |
+
 <h2>Components</h2>
 
 <p>All components are presented here - <a href="https://inkogn1to.github.io/x-project-components/index.html"><strong>X-Project Components</strong></a></p>
