@@ -348,17 +348,18 @@ $(document).ready(function() {
 
 	// 1) add thumbnail
 	$('.js-youtube-video-thumbnail').each(function() {
-		var youtubeVideoID = $(this).children('iframe').attr('src');
-				youtubeVideoID = youtubeVideoID.split('/').pop();
+		var youtubeVideoSrc = $(this).children('iframe').attr('data-youtube-src'),
+				youtubeVideoID = youtubeVideoSrc.split('/').pop();
 
 		$(this).children('.video-thumbnail__overlay').css('background-image', 'url(https://img.youtube.com/vi/' + youtubeVideoID + '/sddefault.jpg)');
 	});
 
 	// 2) on click play iframe
 	$('.js-youtube-video-thumbnail').on('click' , function() {
-		var $this = $(this);
+		var $this = $(this),
+				youtubeVideoSrc = $this.children('iframe').attr('data-youtube-src');
 
-		$this.children('iframe')[0].src += '?autoplay=1';
+		$this.children('iframe').attr('src', youtubeVideoSrc + '?autoplay=1');
 		$this.children('iframe').removeClass('-hide');
 
 		setTimeout(function() {
@@ -373,7 +374,7 @@ $(document).ready(function() {
 	// 1) add thumbnail
 	$('.js-vimeo-video-thumbnail').each(function() {
 		var $this = $(this),
-				vimeoVideoID = $this.children('iframe').attr('src').split('/').pop();
+				vimeoVideoID = $this.children('iframe').attr('data-vimeo-src').split('/').pop();
 
 		$.getJSON('https://www.vimeo.com/api/v2/video/' + vimeoVideoID + '.json?callback=?', { format: 'json' }, function (data) {
 			var thumbnailImg = data[0].thumbnail_large;
@@ -383,10 +384,11 @@ $(document).ready(function() {
 
 	// 2) on click play iframe
 	$('.js-vimeo-video-thumbnail').on('click' , function() {
-		var $this = $(this);
+		var $this = $(this),
+				vimeoVideoSrc = $this.children('iframe').attr('data-vimeo-src');
 
+		$this.children('iframe').attr('src', vimeoVideoSrc + '?autoplay=1');
 		$this.children('iframe').removeClass('-hide');
-		$this.children('iframe')[0].src += '?autoplay=1';
 
 		setTimeout(function() {
 			$this.children('.video-thumbnail__overlay').addClass('-hide');
