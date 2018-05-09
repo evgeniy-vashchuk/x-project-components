@@ -28,6 +28,7 @@
 
 | Changes | Date |
 | ----- | ----- |
+| Added progress bars component | 09.05.2018 |
 | Added shuffle filter component | 01.05.2018 |
 | Added preloader component | 15.04.2018 |
 
