@@ -23,6 +23,60 @@ $(window).on('load', function() {
 $(document).ready(function() {
 
 	// =========================
+	// PROGRESS BARS =================================
+	// =========================
+
+	function progressBars(progressBarsBlock, duration, decimalFunction) {
+		if (!progressBarsBlock[0].animationInit && $('.js-progress-bars').length) {
+			progressBarsBlock[0].animationInit = true;
+
+			var barsDuration = duration;
+
+			progressBarsBlock.find('.progress-bar-item').each(function() {
+				var $percent = $(this).find('.progress-bar-strip__fill-block').attr('data-percentage');
+
+				// bar fill animation
+				$(this).find('.progress-bar-strip__fill-block').animate({
+					width: $percent + '%'
+				}, barsDuration);
+
+				// count up animation
+				var $numberItem = $(this).find('.progress-bar-strip__percent-text');
+
+				$({ numberValue: 0 }).animate({ numberValue: $percent }, {
+					duration: barsDuration,
+					easing: 'linear',
+					step: function() {
+						if (decimalFunction) {
+							decimalFunction($numberItem, this.numberValue);
+						} else {
+							$numberItem.text(Math.floor(this.numberValue));
+						}
+					},
+					complete: function() {
+						$numberItem.text(this.numberValue);
+					}
+				});
+			})
+		}
+	}
+
+	function oneNumberAfterComma($numberItem, numberValue){
+		$numberItem.text(Math.ceil(numberValue*10)/10);
+	}
+
+	function twoNumbersAfterComma($numberItem, numberValue){
+		$numberItem.text(Math.ceil(numberValue*100)/100);
+	}
+
+	var waypoints = $('.js-progress-bars').waypoint({
+		handler: function() {
+			progressBars($(this.element), 4000);
+		},
+		offset: '80%'
+	})
+
+	// =========================
 	// SHUFFLE FILTER =================================
 	// =========================
 
