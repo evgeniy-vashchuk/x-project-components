@@ -23,58 +23,204 @@ $(window).on('load', function() {
 $(document).ready(function() {
 
 	// =========================
+	// COUNT UP =================================
+	// =========================
+
+	(function () {
+		// default settings
+		var settings = {
+			startValue			:	0,
+			dataAttribute		: 'data-count-number',
+			separator				: '.',
+			suffix					: '',
+			duration				:	3000,
+			callback				: null
+		};
+
+		var methods = {
+			start : function(options) {
+
+				var options = $.extend({}, settings, options);
+
+				// insert options in data
+				$('body').data('options', options);
+
+				return this.each(function() {
+					// main variables
+					var $this = $(this),
+							finalValue = $(this).attr(options.dataAttribute),
+							numbersAfterComma,
+							decimalConverting = '1';
+
+					// find amount of numbers after the decimal point
+					if (finalValue.indexOf('.') > 0) {
+						numbersAfterComma = finalValue.length - (finalValue.indexOf('.') + 1);
+					} else {
+						numbersAfterComma = 0;
+					}
+
+					// decimal сonverting
+					for (var i = 0; i < numbersAfterComma; i++) {
+						decimalConverting = decimalConverting + '0';
+					}
+
+					// animation
+					$({ countNumberValue: options.startValue }).animate({ countNumberValue: finalValue }, {
+						duration: options.duration,
+						easing: 'swing',
+						progress: function() {
+
+							$this.text(Math.floor(this.countNumberValue*decimalConverting)/decimalConverting);
+
+							// replace dot
+							$this.text(function(index, text){
+								text = text.replace('.', options.separator) + options.suffix;
+								return text;
+							});
+
+						},
+						complete: function() {
+							$this.text(this.countNumberValue);
+
+							// replace dot
+							$this.text(function(index, text){
+								text = text.replace('.', options.separator) + options.suffix;
+								return text;
+							});
+
+							if (typeof options.callback === "function") {
+								options.callback.call(this, this.countNumberValue);
+							}
+						}
+					});
+				})
+			},
+
+			reset : function() {
+				var $this = $(this),
+						options = $('body').data('options');
+
+				return this.each(function() {
+					$this.text(options.startValue + options.suffix);
+				})
+			}
+		};
+
+		$.fn.countUp = function(method) {
+			if (methods[method]) {
+				return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
+			} else if ( typeof method === 'object' || ! method ) {
+				return methods.start.apply( this, arguments );
+			} else {
+				$.error( 'Method with name ' +  method + ' does not exist for jQuery.countUp' );
+			}
+		};
+	}());
+
+	if ($('.js-count-up-block').length) {
+		$('.js-count-up-block').waypoint({
+			handler: function() {
+				if (!$(this.element)[0].animationInit) {
+					$(this.element)[0].animationInit = true;
+
+					$(this.element).find('.js-count-up-item').countUp({
+						startValue: 0,
+						dataAttribute: 'data-count-number',
+						separator: '.',
+						suffix: '%',
+						duration: 3000,
+						callback: function() {
+							// animation complete
+						}
+					});
+				}
+			},
+			offset: '80%'
+		})
+	}
+
+	// =========================
 	// PROGRESS BARS =================================
 	// =========================
 
-	function progressBars(progressBarsBlock, duration, decimalFunction) {
-		if (!progressBarsBlock[0].animationInit && $('.js-progress-bars').length) {
+	function progressBars(progressBarsBlock, duration, suffix, separator) {
+		if (!progressBarsBlock[0].animationInit) {
 			progressBarsBlock[0].animationInit = true;
+
+			if (suffix === undefined) {
+				suffix = '';
+			}
+
+			if (duration === undefined) {
+				duration = 3000;
+			}
+
+			if (separator === undefined) {
+				separator = '.';
+			}
 
 			var barsDuration = duration;
 
 			progressBarsBlock.find('.progress-bar-item').each(function() {
-				var $percent = $(this).find('.progress-bar-strip__fill-block').attr('data-percentage');
+				var percent = $(this).find('.progress-bar-strip__fill-block').attr('data-percentage'),
+						numbersAfterComma,
+						decimalConverting = '1';
+
+				// find amount of numbers after the decimal point
+				if (percent.indexOf('.') > 0) {
+					numbersAfterComma = percent.length - (percent.indexOf('.') + 1);
+				} else {
+					numbersAfterComma = 0;
+				}
+
+				// decimal сonverting
+				for (var i = 0; i < numbersAfterComma; i++) {
+					decimalConverting = decimalConverting + '0';
+				}
 
 				// bar fill animation
 				$(this).find('.progress-bar-strip__fill-block').animate({
-					width: $percent + '%'
+					width: percent + '%'
 				}, barsDuration);
 
 				// count up animation
-				var $numberItem = $(this).find('.progress-bar-strip__percent-text');
+				var numberItem = $(this).find('.progress-bar-strip__percent-text');
 
-				$({ numberValue: 0 }).animate({ numberValue: $percent }, {
+				$({ numberValue: 0 }).animate({ numberValue: percent }, {
 					duration: barsDuration,
 					easing: 'linear',
-					step: function() {
-						if (decimalFunction) {
-							decimalFunction($numberItem, this.numberValue);
-						} else {
-							$numberItem.text(Math.floor(this.numberValue));
-						}
+					progress: function() {
+						numberItem.text(Math.floor(this.numberValue*decimalConverting)/decimalConverting);
+
+						// replace dot
+						numberItem.text(function(index, text){
+							text = text.replace('.', separator) + suffix;
+							return text;
+						});
+
 					},
 					complete: function() {
-						$numberItem.text(this.numberValue);
+						numberItem.text(this.numberValue);
+
+						// replace dot
+						numberItem.text(function(index, text){
+							text = text.replace('.', separator) + suffix;
+							return text;
+						});
 					}
 				});
 			})
 		}
 	}
 
-	function oneNumberAfterComma($numberItem, numberValue){
-		$numberItem.text(Math.ceil(numberValue*10)/10);
+	if ($('.js-progress-bars').length) {
+		$('.js-progress-bars').waypoint({
+			handler: function() {
+				progressBars($(this.element), 4000, '%', ',');
+			},
+			offset: '80%'
+		})
 	}
-
-	function twoNumbersAfterComma($numberItem, numberValue){
-		$numberItem.text(Math.ceil(numberValue*100)/100);
-	}
-
-	var waypoints = $('.js-progress-bars').waypoint({
-		handler: function() {
-			progressBars($(this.element), 4000);
-		},
-		offset: '80%'
-	})
 
 	// =========================
 	// SHUFFLE FILTER =================================
@@ -241,6 +387,19 @@ $(document).ready(function() {
 	$(window).on('resize', function() {
 		getScrollBarWidth();
 	});
+
+	function addScrollbarCompensation(element) {
+		element.css('padding-right', widthOfScrollbar);
+	}
+
+	function removeScrollbarCompensation(element) {
+		element.css('padding-right', 0);
+	}
+
+	// example
+	addScrollbarCompensation($('.element-one, .element-two'));
+
+	removeScrollbarCompensation($('.element-one, .element-two'));
 
 	// =========================
 	// STANDARD GOOGLE MAP =================================

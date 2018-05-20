@@ -39,11 +39,6 @@
 		right: 5px;
 		transform: translate(0, -50%);
 		white-space: nowrap;
-
-		&:after {
-			content: "%";
-			display: inline-block;
-		}
 	}
 }
 
