@@ -26,114 +26,39 @@ $(document).ready(function() {
 	// COUNT UP =================================
 	// =========================
 
-	(function () {
-		// default settings
-		var settings = {
-			startValue			:	0,
-			dataAttribute		: 'data-count-number',
-			separator				: '.',
-			suffix					: '',
-			duration				:	3000,
-			callback				: null
-		};
+	function countUpNumbers(target, duration) {
+		target.each(function() {
+			if (!target[0].countUpInit) {
+				target[0].countUpInit = true;
 
-		var methods = {
-			start : function(options) {
+				var options = {
+					useEasing: true,
+					decimal: '.',
+					suffix: '%'
+				};
 
-				var options = $.extend({}, settings, options);
+				var countNumber = $(this).attr('data-count-number'),
+						numbersAfterComma;
 
-				// insert options in data
-				$('body').data('options', options);
-
-				return this.each(function() {
-					// main variables
-					var $this = $(this),
-							finalValue = $(this).attr(options.dataAttribute),
-							numbersAfterComma,
-							decimalConverting = '1';
-
-					// find amount of numbers after the decimal point
-					if (finalValue.indexOf('.') > 0) {
-						numbersAfterComma = finalValue.length - (finalValue.indexOf('.') + 1);
-					} else {
-						numbersAfterComma = 0;
-					}
-
-					// decimal сonverting
-					for (var i = 0; i < numbersAfterComma; i++) {
-						decimalConverting = decimalConverting + '0';
-					}
-
-					// animation
-					$({ countNumberValue: options.startValue }).animate({ countNumberValue: finalValue }, {
-						duration: options.duration,
-						easing: 'swing',
-						progress: function() {
-
-							$this.text(Math.floor(this.countNumberValue*decimalConverting)/decimalConverting);
-
-							// replace dot
-							$this.text(function(index, text){
-								text = text.replace('.', options.separator) + options.suffix;
-								return text;
-							});
-
-						},
-						complete: function() {
-							$this.text(this.countNumberValue);
-
-							// replace dot
-							$this.text(function(index, text){
-								text = text.replace('.', options.separator) + options.suffix;
-								return text;
-							});
-
-							if (typeof options.callback === "function") {
-								options.callback.call(this, this.countNumberValue);
-							}
-						}
-					});
-				})
-			},
-
-			reset : function() {
-				var $this = $(this),
-						options = $('body').data('options');
-
-				return this.each(function() {
-					$this.text(options.startValue + options.suffix);
-				})
-			}
-		};
-
-		$.fn.countUp = function(method) {
-			if (methods[method]) {
-				return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
-			} else if ( typeof method === 'object' || ! method ) {
-				return methods.start.apply( this, arguments );
-			} else {
-				$.error( 'Method with name ' +  method + ' does not exist for jQuery.countUp' );
-			}
-		};
-	}());
-
-	if ($('.js-count-up-block').length) {
-		$('.js-count-up-block').waypoint({
-			handler: function() {
-				if (!$(this.element)[0].animationInit) {
-					$(this.element)[0].animationInit = true;
-
-					$(this.element).find('.js-count-up-item').countUp({
-						startValue: 0,
-						dataAttribute: 'data-count-number',
-						separator: '.',
-						suffix: '%',
-						duration: 3000,
-						callback: function() {
-							// animation complete
-						}
-					});
+				// find amount of numbers after the decimal point
+				if (countNumber.indexOf('.') > 0) {
+					numbersAfterComma = countNumber.length - (countNumber.indexOf('.') + 1);
+				} else {
+					numbersAfterComma = 0;
 				}
+
+				var countUpElement = $(this).get(0),
+						numAnim = new CountUp(countUpElement, 0, countNumber, numbersAfterComma, duration/1000, options);
+
+				numAnim.start();
+			}
+		});
+	}
+
+	if ($('.js-count-up-item').length) {
+		$('.js-count-up-item').waypoint({
+			handler: function() {
+				countUpNumbers($(this.element), 4000);
 			},
 			offset: '80%'
 		})
@@ -143,80 +68,47 @@ $(document).ready(function() {
 	// PROGRESS BARS =================================
 	// =========================
 
-	function progressBars(progressBarsBlock, duration, suffix, separator) {
-		if (!progressBarsBlock[0].animationInit) {
-			progressBarsBlock[0].animationInit = true;
+	function progressBars(target, duration) {
+		if (!target[0].progressBarsInit) {
+			target[0].progressBarsInit = true;
 
-			if (suffix === undefined) {
-				suffix = '';
-			}
+			target.find('.js-progress-bar-item').each(function(index) {
 
-			if (duration === undefined) {
-				duration = 3000;
-			}
+				var progressBarPercent = $(this).find('.js-progress-bar-percent').attr('data-progress-percent');
 
-			if (separator === undefined) {
-				separator = '.';
-			}
+				// progress bar fill animation
+				$(this).find('.js-progress-bar-strip').animate({
+					width: progressBarPercent + '%'
+				}, duration, 'swing');
 
-			var barsDuration = duration;
+				// count up animation
+				var options = {
+					useEasing: false,
+					decimal: '.',
+					suffix: '%'
+				};
 
-			progressBarsBlock.find('.progress-bar-item').each(function() {
-				var percent = $(this).find('.progress-bar-strip__fill-block').attr('data-percentage'),
-						numbersAfterComma,
-						decimalConverting = '1';
+				var numbersAfterComma;
 
 				// find amount of numbers after the decimal point
-				if (percent.indexOf('.') > 0) {
-					numbersAfterComma = percent.length - (percent.indexOf('.') + 1);
+				if (progressBarPercent.indexOf('.') > 0) {
+					numbersAfterComma = progressBarPercent.length - (progressBarPercent.indexOf('.') + 1);
 				} else {
 					numbersAfterComma = 0;
 				}
 
-				// decimal сonverting
-				for (var i = 0; i < numbersAfterComma; i++) {
-					decimalConverting = decimalConverting + '0';
-				}
+				var countUpElement = $(this).find('.js-progress-bar-percent').get(0),
+						numAnim = new CountUp(countUpElement, 0, progressBarPercent, numbersAfterComma, duration/1000, options);
 
-				// bar fill animation
-				$(this).find('.progress-bar-strip__fill-block').animate({
-					width: percent + '%'
-				}, barsDuration);
-
-				// count up animation
-				var numberItem = $(this).find('.progress-bar-strip__percent-text');
-
-				$({ numberValue: 0 }).animate({ numberValue: percent }, {
-					duration: barsDuration,
-					easing: 'linear',
-					progress: function() {
-						numberItem.text(Math.floor(this.numberValue*decimalConverting)/decimalConverting);
-
-						// replace dot
-						numberItem.text(function(index, text){
-							text = text.replace('.', separator) + suffix;
-							return text;
-						});
-
-					},
-					complete: function() {
-						numberItem.text(this.numberValue);
-
-						// replace dot
-						numberItem.text(function(index, text){
-							text = text.replace('.', separator) + suffix;
-							return text;
-						});
-					}
-				});
-			})
+				numAnim.start();
+			});
 		}
 	}
 
 	if ($('.js-progress-bars').length) {
 		$('.js-progress-bars').waypoint({
 			handler: function() {
-				progressBars($(this.element), 4000, '%', ',');
+				progressBars($(this.element), 4000);
 			},
 			offset: '80%'
 		})
@@ -482,7 +374,7 @@ $(document).ready(function() {
 			fullscreenControl: true,
 			zoomControlOptions: {
 				position: google.maps.ControlPosition.RIGHT_CENTER
-			},
+			}
 		});
 
 		// array of markers (with coordinates, name, address)
@@ -553,6 +445,92 @@ $(document).ready(function() {
 
 	if ($('#js-map').length) {
 		initMapMultipleMarkers();
+	}
+
+	// =========================
+	// MAP WITH HTML MARKER =================================
+	// =========================
+
+	function initMapWithHtmlMarker() {
+		var coordinates = new google.maps.LatLng(40.709541, -74.007984),
+		zoom = 16;
+
+		var map = new google.maps.Map(document.getElementById('js-map-with-marker'), {
+			center: coordinates,
+			zoom: zoom,
+			disableDefaultUI: true,
+			zoomControl: false,
+			fullscreenControl: false,
+			styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#000000"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":21}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":17}]}]
+		});
+
+		// HTML MAP MARKER
+		function CustomMarker(latlng, map, args) {
+			this.latlng = latlng;
+			this.args = args;
+			this.setMap(map);
+		}
+
+		CustomMarker.prototype = new google.maps.OverlayView();
+
+		CustomMarker.prototype.draw = function() {
+
+			var self = this;
+
+			var div = this.div;
+
+			if (!div) {
+
+				div = this.div = document.createElement('div');
+
+				div.className = 'html-map-marker';
+
+				if (typeof(self.args.marker_id) !== 'undefined') {
+					div.dataset.marker_id = self.args.marker_id;
+				}
+
+				google.maps.event.addDomListener(div, "click", function(event) {
+					// marker click
+					google.maps.event.trigger(self, "click");
+				});
+
+				var panes = this.getPanes();
+				panes.overlayImage.appendChild(div);
+			}
+
+			var point = this.getProjection().fromLatLngToDivPixel(this.latlng);
+
+			var mapMarkerWidth = $('.html-map-marker').width() / 2;
+
+			if (point) {
+				div.style.left = (point.x - mapMarkerWidth) + 'px';
+				div.style.top = (point.y - mapMarkerWidth) + 'px';
+			}
+		};
+
+		CustomMarker.prototype.remove = function() {
+			if (this.div) {
+				this.div.parentNode.removeChild(this.div);
+				this.div = null;
+			}
+		};
+
+		CustomMarker.prototype.getPosition = function() {
+			return this.latlng;
+		};
+
+		var overlay = new CustomMarker(
+			coordinates,
+			map,
+			{
+				marker_id: 'html-map-murker'
+			}
+		);
+		// HTML MAP MARKER END
+	}
+
+	if ($('#js-map-with-marker').length) {
+		initMapWithHtmlMarker();
 	}
 
 	// =========================

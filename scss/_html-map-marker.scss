@@ -1,0 +1,55 @@
+// PULSE ANIMATION
+
+$marker-color: #fff;
+$marker-dot-width: 8px;
+$marker-dot-height: $marker-dot-width;
+$marker-end-size: 120px;
+$animation-duration: 2.5s;
+
+@mixin markerEndSize($circleEndSize){
+	width: $circleEndSize;
+	height: $circleEndSize;
+}
+
+.html-map-marker {
+	position: absolute;
+	z-index: 100;
+	width: $marker-dot-width;
+	height: $marker-dot-height;
+	background-color: $marker-color;
+	border-radius: 50%;
+
+	&:before,
+	&:after {
+		content: '';
+		background-color: rgba($marker-color, 1);
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		border-radius: 50%;
+		transform-origin: center center;
+		animation: pulse $animation-duration linear infinite;
+	}
+
+	&:after {
+		animation-delay: $animation-duration/2;
+	}
+}
+
+@keyframes pulse {
+	0% {
+		@include markerEndSize(0);
+		background-color: rgba($marker-color, 0);
+	}
+	50% {
+		background-color: rgba($marker-color, 0.2);
+	}
+	70% {
+		background-color: rgba($marker-color, 0.4);
+	}
+	100% {
+		@include markerEndSize($marker-end-size);
+		background-color: rgba($marker-color, 0);
+	}
+}

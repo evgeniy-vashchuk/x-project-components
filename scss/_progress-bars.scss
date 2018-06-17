@@ -19,25 +19,16 @@
 
 .progress-bar-strip {
 	position: relative;
-	width: 100%;
+	width: 0;
 	height: 20px;
-	border: 2px solid #26263F;
+	background-color: #4C4E6C;
 
-	&__fill-block {
-		position: absolute;
-		top: -2px;
-		bottom: -2px;
-		left: -2px;
-		background-color: #4C4E6C;
-		z-index: 1;
-	}
-
-	&__percent-text {
-		color: #fff;
+	&__percent {
 		position: absolute;
 		top: 50%;
 		right: 5px;
 		transform: translate(0, -50%);
+		color: #fff;
 		white-space: nowrap;
 	}
 }
