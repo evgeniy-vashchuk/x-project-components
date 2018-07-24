@@ -30,6 +30,7 @@
 
 | Changes | Date |
 | ----- | ----- |
+| Added SVG animation component. | 17.06.2018 |
 | Fixed Count Up and Progress bars components (for the count up numbers used countUp.js), added HTML map marker component | 17.06.2018 |
 | Added count up component, added function for scroll bar compensation, fixed decimal converting in progress bars | 20.05.2018 |
 | Added progress bars component | 09.05.2018 |
