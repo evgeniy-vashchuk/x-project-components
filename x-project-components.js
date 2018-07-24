@@ -23,6 +23,30 @@ $(window).on('load', function() {
 $(document).ready(function() {
 
 	// =========================
+	// SVG ANIMATION =================================
+	// =========================
+
+	if ($('.js-svg-animation-item').length) {
+		$('.js-svg-animation-item').waypoint({
+			handler: function() {
+				var thisItem = $(this.element);
+
+				if (!thisItem.hasClass('-animation-init')) {
+					// remove hide class
+					thisItem.addClass('-animation-init');
+
+					// svg animation init
+					new Vivus(this.element, {
+						duration: 200,
+						type: 'oneByOne'
+					});
+				}
+			},
+			offset: '80%'
+		})
+	}
+
+	// =========================
 	// COUNT UP =================================
 	// =========================
 

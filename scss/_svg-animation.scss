@@ -1,0 +1,19 @@
+.svg-animation-item {
+	fill: none;
+
+	path {
+		stroke-width: 4;
+		stroke: transparent;
+	}
+
+	&.-animation-init {
+		path {
+			stroke: inherit;
+		}
+	}
+
+	// COLORS
+	&.-purple {
+		stroke: #4C4E6D;
+	}
+}
