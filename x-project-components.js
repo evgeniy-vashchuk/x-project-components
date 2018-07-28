@@ -277,7 +277,6 @@ $(document).ready(function() {
 				animationComplete = true;
 			});
 		}
-
 	});
 
 	// =========================
