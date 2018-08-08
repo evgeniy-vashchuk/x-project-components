@@ -1,10 +1,10 @@
 <p>
-	<a href="https://inkogn1to.github.io/x-project-components/index.html"><img src="https://raw.githubusercontent.com/inkogn1to/x-project-components/master/logo.jpg" alt="X-project "></a>
+	<a href="https://inkogn1to.github.io/x-project-components/index.html"><img src="https://raw.githubusercontent.com/inkogn1to/x-project-components/master/banner.jpg" alt="X-project "></a>
 </p>
 
 <h2>About</h2>
 
-<p><strong>X-Project Components</strong> - is a collection of most useful components for page layout. For each component are presented description and code examples with the help of which you can easily understand and apply the right component on your website. In X-Project Components all css code was written by <strong><a href="https://sass-lang.com/" target="_blank">SASS</a></strong> (with SCSS syntax) and all javascript code with the use of a library <strong><a href="https://jquery.com/" target="_blank">jQuery</a></strong>.</p>
+<p><strong>X-Project Components</strong> - is a collection of the most useful components for page layout. For each component are presented description and code examples with the help of which you can easily understand and apply the right component on your website. In X-Project Components all css code was written by <strong><a href="https://sass-lang.com/" target="_blank">SASS</a></strong> (with SCSS syntax) and all javascript code with the use of a library <strong><a href="https://jquery.com/" target="_blank">jQuery</a></strong>.</p>
 <p>All css code for components was written using <strong><a href="https://en.bem.info/" target="_blank">BEM</a></strong> naming, meaning <strong>.block-name</strong> for independent block, <strong>.block-name__element-name</strong> for elements inside that block. And <strong>.-modifier-name</strong> for modifiers of the block. For javascript hooks was used prefix <strong>.js-*</strong>.</p>
 <p>Every component are checked for validity through <strong><a href="https://validator.w3.org/" target="_blank">validator.w3.org</a></strong>, tested for сross-browser compatibility through <a href="https://www.browserstack.com" target="_blank"><strong>browserstack.com</strong></a>, and works in the latest versions of all popular browsers (including IE11).</p>
 
