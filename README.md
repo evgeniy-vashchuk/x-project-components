@@ -30,6 +30,7 @@
 
 | Changes | Date |
 | ----- | ----- |
+| Refactoring of all components. | 17.10.2019 |
 | Added SVG animation component. | 17.06.2018 |
 | Fixed Count Up and Progress bars components (for the count up numbers used countUp.js), added HTML map marker component | 17.06.2018 |
 | Added count up component, added function for scroll bar compensation, fixed decimal converting in progress bars | 20.05.2018 |
@@ -39,4 +40,4 @@
 
 <h2>Components</h2>
 
-<p>All components are presented here - <a href="https://inkogn1to.github.io/x-project-components/index.html"><strong>X-Project Components</strong></a></p>
+<p>All components are presented here - <a href="https://evgeniy-vashchuk.github.io/x-project-components/index.html"><strong>X-Project Components</strong></a></p>
