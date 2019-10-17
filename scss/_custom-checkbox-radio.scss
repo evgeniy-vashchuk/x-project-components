@@ -2,17 +2,18 @@
 
 $checkbox-checkmark-size: 25px;
 $checkbox-bg-color: #4C4E6C;
-$checkbox-active-bg-color: #26263F;
+
+// states
+$checkbox-checked-bg-color: #26263F;
+$checkbox-disabled-bg-color: #a2a3b4;
+$checkbox-focus-box-shadow-color: #c0c774;
 
 .custom-checkbox {
 	position: relative;
-	display: inline-block;
 	padding-left: 35px;
-	margin-right: 15px;
-	margin-bottom: 1rem;
-	line-height: 25px;
+	margin-bottom: 15px;
+	line-height: $checkbox-checkmark-size;
 	cursor: pointer;
-	user-select: none;
 
 	&__checkmark {
 		position: absolute;
@@ -22,7 +23,8 @@ $checkbox-active-bg-color: #26263F;
 		width: $checkbox-checkmark-size;
 		height: $checkbox-checkmark-size;
 		background-color: $checkbox-bg-color;
-		transition: 0.3s;
+		box-shadow: 0 0 0 0 $checkbox-focus-box-shadow-color;
+		transition: background-color 0.3s, box-shadow 0.3s;
 	}
 
 	&__icon {
@@ -31,23 +33,26 @@ $checkbox-active-bg-color: #26263F;
 		left: 50%;
 		transform: translate(-50%, -50%);
 		display: inline-block;
-		font-size: 0.9rem;
+		font-size: 15px;
 		color: #fff;
 		opacity: 0;
-		transition: 0.2s;
+		transition: opacity 0.2s;
 	}
 
 	&__input {
 		position: absolute;
-		top: 0;
-		left: 0;
-		z-index: -1;
-		visibility: hidden;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		border: 0;
+		clip: rect(0 0 0 0);
+		overflow: hidden;
 
 		// checked styles
 		&:checked + {
 			.custom-checkbox__checkmark {
-				background-color: $checkbox-active-bg-color;
+				background-color: $checkbox-checked-bg-color;
 
 				.custom-checkbox__icon {
 					opacity: 1;
@@ -58,7 +63,14 @@ $checkbox-active-bg-color: #26263F;
 		// disabled styles
 		&:disabled + {
 			.custom-checkbox__checkmark {
-				background-color: rgba($checkbox-bg-color, 0.5);
+				background-color: $checkbox-disabled-bg-color;
+			}
+		}
+
+		// focus styles
+		&:focus + {
+			.custom-checkbox__checkmark {
+				box-shadow: 0 0 0 3px $checkbox-focus-box-shadow-color;
 			}
 		}
 	}
@@ -76,17 +88,18 @@ $checkbox-active-bg-color: #26263F;
 
 $radio-checkmark-size: 25px;
 $radio-bg-color: #4C4E6C;
-$radio-active-bg-color: #26263F;
+
+// states
+$radio-checked-bg-color: #26263F;
+$radio-disabled-bg-color: #a2a3b4;
+$radio-focus-box-shadow-color: #c0c774;
 
 .custom-radio {
 	position: relative;
-	display: inline-block;
 	padding-left: 35px;
-	margin-right: 15px;
-	margin-bottom: 1rem;
-	line-height: 25px;
+	margin-bottom: 15px;
+	line-height: $radio-checkmark-size;
 	cursor: pointer;
-	user-select: none;
 
 	&__checkmark {
 		position: absolute;
@@ -97,7 +110,8 @@ $radio-active-bg-color: #26263F;
 		height: $radio-checkmark-size;
 		border-radius: 50%;
 		background-color: $radio-bg-color;
-		transition: 0.3s;
+		box-shadow: 0 0 0 0 $checkbox-focus-box-shadow-color;
+		transition: background-color 0.3s, box-shadow 0.3s;
 	}
 
 	&__icon {
@@ -106,23 +120,26 @@ $radio-active-bg-color: #26263F;
 		left: 50%;
 		transform: translate(-50%, -50%);
 		display: inline-block;
-		font-size: 0.65rem;
-		color: #fff;
-		transition: 0.2s;
+		font-size: 9px;
+		color: #ffffff;
+		transition: opacity 0.2s;
 		opacity: 0;
 	}
 
 	&__input {
 		position: absolute;
-		top: 0;
-		left: 0;
-		z-index: -1;
-		visibility: hidden;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		border: 0;
+		clip: rect(0 0 0 0);
+		overflow: hidden;
 
 		// checked styles
 		&:checked + {
 			.custom-radio__checkmark {
-				background-color: $radio-active-bg-color;
+				background-color: $radio-checked-bg-color;
 
 				.custom-radio__icon {
 					opacity: 1;
@@ -133,7 +150,14 @@ $radio-active-bg-color: #26263F;
 		// disabled styles
 		&:disabled + {
 			.custom-radio__checkmark {
-				background-color: rgba($radio-bg-color, 0.5);
+				background-color: $radio-disabled-bg-color;
+			}
+		}
+
+		// focus styles
+		&:focus + {
+			.custom-radio__checkmark {
+				box-shadow: 0 0 0 3px $checkbox-focus-box-shadow-color;
 			}
 		}
 	}

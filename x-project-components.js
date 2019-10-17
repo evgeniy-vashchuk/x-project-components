@@ -6,19 +6,21 @@
 // PRELOADER =================================
 // =========================
 
-// hide preloader by click
-$('.js-preloader').on('click', function() {
-	$('.js-preloader').fadeOut('slow');
-});
+function hidePreloader(preloaderItem, hideTimeout) {
+	// hide preloader by click
+	preloaderItem.on('click', function() {
+		$(this).fadeOut('slow');
+	});
 
-$(window).on('load', function() {
+	$(window).on('load', function() {
+		// hide preloader
+		setTimeout(function() {
+			preloaderItem.fadeOut('slow');
+		}, hideTimeout);
+	});
+}
 
-	// hide preloader
-	setTimeout(function() {
-		$('.js-preloader').fadeOut('slow');
-	}, 1000);
-
-});
+hidePreloader($('.js-preloader'), 1000);
 
 $(document).ready(function() {
 
@@ -26,128 +28,141 @@ $(document).ready(function() {
 	// SVG ANIMATION =================================
 	// =========================
 
-	if ($('.js-svg-animation-item').length) {
-		$('.js-svg-animation-item').waypoint({
-			handler: function() {
-				var thisItem = $(this.element);
+	function svgAnimation(svgItem, duration) {
+		$(svgItem).addClass('-animation-init');
 
-				if (!thisItem.hasClass('-animation-init')) {
-					// remove hide class
-					thisItem.addClass('-animation-init');
-
-					// svg animation init
-					new Vivus(this.element, {
-						duration: 200,
-						type: 'oneByOne'
-					});
-				}
-			},
-			offset: '80%'
-		})
+		new Vivus(svgItem, {
+			duration: duration,
+			type: 'oneByOne'
+		});
 	}
+
+	function svgAnimationOnScroll() {
+		var svgItem = $('.js-svg-animation-item');
+
+		if (svgItem.length) {
+			svgItem.waypoint({
+				handler: function() {
+					if (!this.element.svgAnimationInit) {
+						this.element.svgAnimationInit = true;
+
+						svgAnimation(this.element, 300)
+					}
+				},
+				offset: '80%'
+			})
+		}
+	}
+
+	svgAnimationOnScroll();
 
 	// =========================
 	// COUNT UP =================================
 	// =========================
 
-	function countUpNumbers(target, duration) {
-		target.each(function() {
-			if (!target[0].countUpInit) {
-				target[0].countUpInit = true;
+	function countUpNumbers(countUpItem, duration) {
+		var countNumber = $(countUpItem).attr('data-count-number'),
+				numbersAfterComma = 0;
 
-				var options = {
-					useEasing: true,
-					decimal: '.',
-					suffix: '%'
-				};
+		if (countNumber.indexOf('.') > 0) {
+			numbersAfterComma = countNumber.length - (countNumber.indexOf('.') + 1);
+		}
 
-				var countNumber = $(this).attr('data-count-number'),
-						numbersAfterComma;
+		var options = {
+			useEasing: true,
+			decimal: '.',
+			suffix: '%'
+		};
 
-				// find amount of numbers after the decimal point
-				if (countNumber.indexOf('.') > 0) {
-					numbersAfterComma = countNumber.length - (countNumber.indexOf('.') + 1);
-				} else {
-					numbersAfterComma = 0;
-				}
-
-				var countUpElement = $(this).get(0),
-						numAnim = new CountUp(countUpElement, 0, countNumber, numbersAfterComma, duration/1000, options);
-
-				numAnim.start();
-			}
-		});
+		new CountUp(countUpItem, 0, countNumber, numbersAfterComma, duration/1000, options).start();
 	}
 
-	if ($('.js-count-up-item').length) {
-		$('.js-count-up-item').waypoint({
-			handler: function() {
-				countUpNumbers($(this.element), 4000);
-			},
-			offset: '80%'
-		})
+	function countUpNumbersOnScroll() {
+		var countUpItem = $('.js-count-up-item');
+
+		if (countUpItem.length) {
+			countUpItem.waypoint({
+				handler: function() {
+					if (!this.element.countUpInit) {
+						this.element.countUpInit = true;
+
+						countUpNumbers(this.element, 4000);
+					}
+				},
+				offset: '80%'
+			})
+		}
 	}
+
+	countUpNumbersOnScroll();
 
 	// =========================
 	// PROGRESS BARS =================================
 	// =========================
 
-	function progressBars(target, duration) {
-		if (!target[0].progressBarsInit) {
-			target[0].progressBarsInit = true;
+	function progressBars(progressBarsBlock, duration) {
+		var progressBarItem = $(progressBarsBlock).find('.js-progress-bar-item');
 
-			target.find('.js-progress-bar-item').each(function(index) {
+		progressBarItem.each(function() {
+			var progressBarsFillItem = $(this).find('.js-progress-bar-strip'),
+					progressBarsCountUpItem = $(this).find('.js-progress-bar-percent'),
+					progressBarPercent = progressBarsCountUpItem.attr('data-progress-percent');
 
-				var progressBarPercent = $(this).find('.js-progress-bar-percent').attr('data-progress-percent');
+			// progress bar fill animation
+			progressBarsFillItem.animate({
+				width: progressBarPercent + '%'
+			}, duration, 'swing');
 
-				// progress bar fill animation
-				$(this).find('.js-progress-bar-strip').animate({
-					width: progressBarPercent + '%'
-				}, duration, 'swing');
+			// count up animation
+			var options = {
+				useEasing: false,
+				decimal: '.',
+				suffix: '%'
+			};
 
-				// count up animation
-				var options = {
-					useEasing: false,
-					decimal: '.',
-					suffix: '%'
-				};
+			// find amount of numbers after the decimal point
+			var numbersAfterComma = 0;
 
-				var numbersAfterComma;
+			if (progressBarPercent.indexOf('.') > 0) {
+				numbersAfterComma = progressBarPercent.length - (progressBarPercent.indexOf('.') + 1);
+			}
 
-				// find amount of numbers after the decimal point
-				if (progressBarPercent.indexOf('.') > 0) {
-					numbersAfterComma = progressBarPercent.length - (progressBarPercent.indexOf('.') + 1);
-				} else {
-					numbersAfterComma = 0;
-				}
+			var countUpElement = progressBarsCountUpItem.get(0),
+					numAnim = new CountUp(countUpElement, 0, progressBarPercent, numbersAfterComma, duration/1000, options);
 
-				var countUpElement = $(this).find('.js-progress-bar-percent').get(0),
-						numAnim = new CountUp(countUpElement, 0, progressBarPercent, numbersAfterComma, duration/1000, options);
+			numAnim.start();
+		});
+	}
 
-				numAnim.start();
-			});
+	function progressBarsOnScroll() {
+		var progressBarsBlock = $('.js-progress-bars');
+
+		if (progressBarsBlock.length) {
+			progressBarsBlock.waypoint({
+				handler: function() {
+					if (!this.element.progressBarsInit) {
+						this.element.progressBarsInit = true;
+
+						progressBars(this.element, 4000);
+					}
+				},
+				offset: '80%'
+			})
 		}
 	}
 
-	if ($('.js-progress-bars').length) {
-		$('.js-progress-bars').waypoint({
-			handler: function() {
-				progressBars($(this.element), 4000);
-			},
-			offset: '80%'
-		})
-	}
+	progressBarsOnScroll();
 
 	// =========================
 	// SHUFFLE FILTER =================================
 	// =========================
 
-	function filterInit(filterContainer) {
+	function filterInit() {
+		var filterContainer = $('.js-filter-container');
 
 		if (filterContainer.length) {
-			var filterMainContainer = filterContainer,
-					filterContent = filterMainContainer.find('.filter-content'),
-					filterNav = filterMainContainer.find('.filter-nav'),
+			var filterContent = filterContainer.find('.filter-content'),
+					filterNav = filterContainer.find('.filter-nav'),
 					filterCategoryName = '',
 					shuffle = window.shuffle;
 
@@ -173,26 +188,29 @@ $(document).ready(function() {
 		}
 	}
 
-	filterInit($('.js-filter-container'));
+	filterInit();
 
 	// =========================
 	// SMALL HEADER AFTER SCROLL =================================
 	// =========================
 
-	// distance after which header becoming small
-	var distanceY = 1;
+	function smallHeaderAfterScroll(distanceY) {
+		var header = $('.js-header');
 
-	$(window).on('scroll', function() {
-		if ($(this).scrollTop() > distanceY) {
-			$('.js-header').addClass('-small-header');
-		} else {
-			$('.js-header').removeClass('-small-header');
+		$(window).on('scroll', function() {
+			if ($(this).scrollTop() > distanceY) {
+				header.addClass('-small-header');
+			} else {
+				header.removeClass('-small-header');
+			}
+		});
+
+		if ($(document).scrollTop() > distanceY) {
+			header.addClass('-small-header');
 		}
-	})
-
-	if ($(document).scrollTop() > distanceY) {
-		$('.js-header').addClass('-small-header');
 	}
+
+	smallHeaderAfterScroll(1);
 
 	// =========================
 	// STICKY FOOTER =================================
@@ -218,66 +236,82 @@ $(document).ready(function() {
 	// SCROLL TOP BUTTON =================================
 	// =========================
 
-	// 1) checking the distance from the top of the page
-	$(window).on('scroll', function() {
-		if ($(this).scrollTop() > 100) {
-			$('.js-scroll-top-btn').addClass('-show');
-		} else {
-			$('.js-scroll-top-btn').removeClass('-show');
-		}
-	});
+	function showHideScrollTopBtn(distance) {
+		var scrollTopBtn = $('.js-scroll-top-btn');
 
-	if ($(document).scrollTop() > 100) {
-		$('.js-scroll-top-btn').addClass('-show');
+		$(window).on('scroll', function() {
+			if ($(this).scrollTop() > distance) {
+				scrollTopBtn.addClass('-show');
+			} else {
+				scrollTopBtn.removeClass('-show');
+			}
+		});
+
+		if ($(document).scrollTop() > distance) scrollTopBtn.addClass('-show');
 	}
 
-	// 2) сlick event to scroll to top
-	var scrollingComplete = true;
-
-	$('.js-scroll-top').on('click', function() {
-
-		if (scrollingComplete) {
-			scrollingComplete = false;
-
-			$('body, html').animate({
-				scrollTop: 0
-			}, 1000 ).promise().done(function() {
+	function scrollTopAnimation() {
+		var scrollTopBtn = $('.js-scroll-top-btn'),
 				scrollingComplete = true;
-			});
 
-			return false;
-		}
-	});
+		scrollTopBtn.on('click', function() {
+
+			if (scrollingComplete) {
+				scrollingComplete = false;
+
+				$('body, html').animate({
+					scrollTop: 0
+				}, 1000 ).promise().done(function() {
+					scrollingComplete = true;
+				});
+
+				return false;
+			}
+		});
+	}
+
+	function scrollTopBtn() {
+		// 1) checking the distance from the top of the page
+		showHideScrollTopBtn(100);
+		// 2) сlick event to scroll top
+		scrollTopAnimation();
+	}
+
+	scrollTopBtn();
 
 	// =========================
 	// SCROLL TO ELEMENT =================================
 	// =========================
 
-	var animationComplete = true;
+	function scrollToElement() {
+		var animationComplete = true;
 
-	$('a[href^="#"]:not(.js-no-scroll)').on('click', function(e) {
-		e.preventDefault();
+		$('a[href^="#"]:not(.js-no-scroll)').on('click', function(e) {
+			e.preventDefault();
 
-		// height of header (for offset)
-		var headerOffset = $('.js-header').outerHeight(),
-				idOfElement = $(this).attr('href');
+			// height of header (for offset)
+			var headerOffset = $('.js-header').outerHeight(),
+					idOfElement = $(this).attr('href');
 
-		if (headerOffset === undefined) {
-			headerOffset = 0;
-		}
+			if (headerOffset === undefined) {
+				headerOffset = 0;
+			}
 
-		var top = $(idOfElement).offset().top - headerOffset;
+			var top = $(idOfElement).offset().top - headerOffset;
 
-		if (animationComplete) {
-			animationComplete = false;
+			if (animationComplete) {
+				animationComplete = false;
 
-			$('body, html').animate({
-				scrollTop: top
-			}, 1000 ).promise().done(function() {
-				animationComplete = true;
-			});
-		}
-	});
+				$('body, html').animate({
+					scrollTop: top
+				}, 1000 ).promise().done(function() {
+					animationComplete = true;
+				});
+			}
+		});
+	}
+
+	scrollToElement();
 
 	// =========================
 	// WIDTH OF SCROLLBAR =================================
@@ -295,7 +329,7 @@ $(document).ready(function() {
 		} else {
 			return widthOfScrollbar = 0;
 		}
-	};
+	}
 
 	getScrollBarWidth();
 
@@ -321,10 +355,14 @@ $(document).ready(function() {
 	// =========================
 
 	function initMap() {
+		var mapBlock = $('.js-map');
+
+		if (!mapBlock.length) return;
+
 		var coordinates = new google.maps.LatLng(40.712348, -74.006720),
 		zoom = 12;
 
-		var map = new google.maps.Map(document.getElementById('js-map'), {
+		var map = new google.maps.Map(mapBlock.get(0), {
 			center: coordinates,
 			zoom: zoom,
 			disableDefaultUI: true,
@@ -379,19 +417,20 @@ $(document).ready(function() {
 		google.maps.event.addListener(map, 'click', function() {
 			infoWindow.close();
 		});
-
 	}
 
-	if ($('#js-map').length) {
-		initMap();
-	}
+	initMap();
 
 	// =========================
 	// GOOGLE MAP WITH MULTIPLE MARKER =================================
 	// =========================
 
 	function initMapMultipleMarkers() {
-		var map = new google.maps.Map(document.getElementById('js-map-multiple-markers'), {
+		var mapBlock = $('.js-map-multiple-markers');
+
+		if (!mapBlock.length) return;
+
+		var map = new google.maps.Map(mapBlock.get(0), {
 			disableDefaultUI: true,
 			zoomControl: true,
 			fullscreenControl: true,
@@ -466,19 +505,21 @@ $(document).ready(function() {
 		}
 	}
 
-	if ($('#js-map').length) {
-		initMapMultipleMarkers();
-	}
+	initMapMultipleMarkers();
 
 	// =========================
 	// MAP WITH HTML MARKER =================================
 	// =========================
 
 	function initMapWithHtmlMarker() {
+		var mapBlock = $('.js-map-with-marker');
+
+		if (!mapBlock.length) return;
+
 		var coordinates = new google.maps.LatLng(40.709541, -74.007984),
 		zoom = 16;
 
-		var map = new google.maps.Map(document.getElementById('js-map-with-marker'), {
+		var map = new google.maps.Map(mapBlock.get(0), {
 			center: coordinates,
 			zoom: zoom,
 			disableDefaultUI: true,
@@ -552,62 +593,66 @@ $(document).ready(function() {
 		// HTML MAP MARKER END
 	}
 
-	if ($('#js-map-with-marker').length) {
-		initMapWithHtmlMarker();
-	}
+	initMapWithHtmlMarker();
 
 	// =========================
 	// YOUTUBE THUMBNAIL =================================
 	// =========================
 
-	// 1) add thumbnail
-	$('.js-youtube-video-thumbnail').each(function() {
-		var youtubeVideoSrc = $(this).children('iframe').attr('data-youtube-src'),
-				youtubeVideoID = youtubeVideoSrc.split('/').pop();
+	function getYouTubeVideoId(videoItem) {
+		var videoThumbnailUrl = videoItem.find('.js-youtube-thumbnail-media').attr('style');
 
-		$(this).children('.video-thumbnail__overlay').css('background-image', 'url(https://img.youtube.com/vi/' + youtubeVideoID + '/sddefault.jpg)');
-	});
+		return videoThumbnailUrl.split('/')[videoThumbnailUrl.split('/').length - 2];
+	}
 
-	// 2) on click play iframe
-	$('.js-youtube-video-thumbnail').on('click' , function() {
-		var $this = $(this),
-				youtubeVideoSrc = $this.children('iframe').attr('data-youtube-src');
+	function insertYouTubeIframe() {
+		$('.js-youtube-thumbnail').on('click', function() {
+			var youTubeIframe = $('<iframe class="youtube-thumbnail__media" allowfullscreen></iframe>');
+					youTubeIframe.attr('allow', 'autoplay');
+					youTubeIframe.attr('src', 'https://www.youtube.com/embed/' + getYouTubeVideoId($(this)) + '?rel=0&showinfo=0&autoplay=1');
 
-		$this.children('iframe').attr('src', youtubeVideoSrc + '?autoplay=1');
-		$this.children('iframe').removeClass('-hide');
+			$(this).find('.js-youtube-thumbnail-media').remove();
+			$(this).append(youTubeIframe);
+		})
+	}
 
-		setTimeout(function() {
-			$this.children('.video-thumbnail__overlay').addClass('-hide');
-		}, 300);
-	});
+	insertYouTubeIframe();
 
 	// =========================
 	// VIMEO THUMBNAIL =================================
 	// =========================
 
-	// 1) add thumbnail
-	$('.js-vimeo-video-thumbnail').each(function() {
-		var $this = $(this),
-				vimeoVideoID = $this.children('iframe').attr('data-vimeo-src').split('/').pop();
+	function getVimeoVideoId(vimeoBlock) {
+		return vimeoBlock.attr('data-vimeo-url').split('/').pop();
+	}
 
-		$.getJSON('https://www.vimeo.com/api/v2/video/' + vimeoVideoID + '.json?callback=?', { format: 'json' }, function (data) {
+	function setVimeoThumbnailBackground(vimeoBlock) {
+		$.getJSON('https://www.vimeo.com/api/v2/video/' + getVimeoVideoId(vimeoBlock) + '.json?callback=?', { format: 'json' }, function (data) {
 			var thumbnailImg = data[0].thumbnail_large;
-			$this.children('.video-thumbnail__overlay').css('background-image', 'url(' + thumbnailImg + ')');
+			vimeoBlock.find('.js-vimeo-thumbnail-media').css('background-image', 'url(' + thumbnailImg + ')');
 		});
-	});
+	}
 
-	// 2) on click play iframe
-	$('.js-vimeo-video-thumbnail').on('click' , function() {
-		var $this = $(this),
-				vimeoVideoSrc = $this.children('iframe').attr('data-vimeo-src');
+	function setVimeoThumbnailBackgroundToAllBlocks() {
+		$('.js-vimeo-thumbnail').each(function() {
+			setVimeoThumbnailBackground($(this));
+		});
+	}
 
-		$this.children('iframe').attr('src', vimeoVideoSrc + '?autoplay=1');
-		$this.children('iframe').removeClass('-hide');
+	setVimeoThumbnailBackgroundToAllBlocks();
 
-		setTimeout(function() {
-			$this.children('.video-thumbnail__overlay').addClass('-hide');
-		}, 300);
-	});
+	function insertVimeoIframe() {
+		$('.js-vimeo-thumbnail').on('click', function() {
+			var vimeoIframe = $('<iframe class="vimeo-thumbnail__media" allowfullscreen></iframe>');
+					vimeoIframe.attr('allow', 'autoplay');
+					vimeoIframe.attr('src', 'https://player.vimeo.com/video/' + getVimeoVideoId($(this)) + '?autoplay=1');
+
+			$(this).find('.js-vimeo-thumbnail-media').remove();
+			$(this).append(vimeoIframe);
+		})
+	}
+
+	insertVimeoIframe();
 
 });
 
