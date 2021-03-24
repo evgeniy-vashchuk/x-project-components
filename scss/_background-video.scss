@@ -1,0 +1,22 @@
+.bg-video-block {
+	position: relative;
+	height: 300px;
+
+	&__html-bg-video {
+		position: absolute;
+		min-width: 100%;
+		min-height: 100%;
+		width: auto;
+		height: auto;
+		top: 50%;
+		left: 50%;
+		object-fit: cover;
+		transform: translate(-50%,-50%);
+		opacity: 0;
+		transition: opacity 300ms linear;
+
+		&.is-visible {
+			opacity: 1;
+		}
+	}
+}

@@ -1,0 +1,86 @@
+$bar-width: 50px;
+$bar-height: 4px;
+$bar-spacing: 8px;
+$bar-border-radius: 0;
+$bar-color: #000000;
+$opening-time: 600ms;
+
+.hamburger-menu {
+	position: relative;
+	display: inline-block;
+	width: $bar-width;
+	height: $bar-width;
+	text-decoration: none;
+
+	&.-active {
+		.hamburger-menu__bars {
+			background-color: rgba($bar-color, 0);
+
+			&:before {
+				visibility: visible;
+				bottom: 0;
+				transform: rotate(-45deg);
+				transition: bottom $opening-time/2 cubic-bezier(0.23, 1, 0.32, 1), transform $opening-time/2 $opening-time/2 cubic-bezier(0.23, 1, 0.32, 1);
+			}
+
+			&:after {
+				visibility: visible;
+				top: 0;
+				transform: rotate(45deg);
+				transition: top $opening-time/2 cubic-bezier(0.23, 1, 0.32, 1), transform $opening-time/2 $opening-time/2 cubic-bezier(0.23, 1, 0.32, 1);
+			}
+		}
+	}
+
+	&.-without-animation {
+		.hamburger-menu__bars,
+		.hamburger-menu__bars:before,
+		.hamburger-menu__bars:after {
+			transition: none;
+		}
+	}
+
+	&__wrap {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: $bar-width;
+		height: $bar-height * 3 + $bar-spacing * 2;
+	}
+
+	&__bars,
+	&__bars:before,
+	&__bars:after {
+		width: $bar-width;
+		height: $bar-height;
+		background-color: $bar-color;
+		border-radius: $bar-border-radius;
+	}
+
+	&__bars {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		transition: background-color 0ms $opening-time/2;
+
+		&:before {
+			content: "";
+			position: absolute;
+			left: 0;
+			bottom: $bar-spacing + $bar-height;
+			transition: bottom $opening-time/2 $opening-time/2 cubic-bezier(0.23, 1, 0.32, 1), transform $opening-time/2 cubic-bezier(0.23, 1, 0.32, 1);
+			visibility: visible;
+		}
+
+		&:after {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: $bar-spacing + $bar-height;
+			transition: top $opening-time/2 $opening-time/2 cubic-bezier(0.23, 1, 0.32, 1), transform $opening-time/2 cubic-bezier(0.23, 1, 0.32, 1);
+			visibility: visible;
+		}
+	}
+}

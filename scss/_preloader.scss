@@ -1,4 +1,4 @@
-$preloader-overlay-bg-color: #fff;
+$preloader-overlay-bg-color: #FFFFFF;
 
 .preloader-overlay {
 	position: fixed;
@@ -23,8 +23,8 @@ $preloader-overlay-bg-color: #fff;
 .preloader-item {
 	height: 50px;
 	width: 50px;
-	border: 5px solid rgba(#26263F, 0.3);
-	border-top: 5px solid #26263F;
+	border: 5px solid rgba(#000000, 0.3);
+	border-top: 5px solid #000000;
 	border-radius: 50%;
 	animation: rotate 1s infinite linear;
 }
@@ -33,6 +33,7 @@ $preloader-overlay-bg-color: #fff;
 	0% {
 		transform: translate(-50%, -50%) rotate(0deg);
 	}
+
 	100% {
 		transform: translate(-50%, -50%) rotate(360deg);
 	}
