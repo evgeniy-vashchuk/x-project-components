@@ -1,163 +1,212 @@
-(function ($) {
-
 'use strict';
 
-// =========================
-// PRELOADER =================================
-// =========================
+(function ($) {
 
-function hidePreloader(preloaderItem, hideTimeout) {
-	// hide preloader by click
-	preloaderItem.on('click', function() {
-		$(this).fadeOut('slow');
-	});
+	// =========================
+	// PRELOADER =================================
+	// =========================
 
-	$(window).on('load', function() {
-		// hide preloader
-		setTimeout(function() {
-			preloaderItem.fadeOut('slow');
-		}, hideTimeout);
-	});
-}
+	function initPreloader() {
+		var preloader = $('.js-preloader'),
+				hideTimeout = 1000;
 
-hidePreloader($('.js-preloader'), 1000);
+		// hide preloader by click
+		preloader.on('click', function() {
+			$(this).fadeOut('slow');
+		});
 
-$(document).ready(function() {
+		$(window).on('load', function() {
+			// hide preloader
+			setTimeout(function() {
+				preloader.fadeOut('slow');
+			}, hideTimeout);
+		});
+	}
+
+	initPreloader();
+
+	// =========================
+	// HAMBURGER MENU =================================
+	// =========================
+
+	function initHamburgerMenu() {
+		$('.js-hamburger-menu').on('click', function(e) {
+			e.preventDefault();
+
+			if ($(this).hasClass('-active')) {
+				$(this).removeClass('-active');
+			} else {
+				$(this).addClass('-active')
+			}
+		})
+	}
+
+	initHamburgerMenu();
+
+	// =========================
+	// VIEWPORT UNITS ON MOBILE =================================
+	// =========================
+
+	function initViewportUnitsOnMobile() {
+		var vh = window.innerHeight * 0.01;
+		document.documentElement.style.setProperty('--vh', vh + 'px');
+
+		$(window).on('resize', function() {
+			vh = window.innerHeight * 0.01;
+			document.documentElement.style.setProperty('--vh', vh + 'px');
+		});
+	}
+
+	initViewportUnitsOnMobile();
 
 	// =========================
 	// SVG ANIMATION =================================
 	// =========================
 
-	function svgAnimation(svgItem, duration) {
-		$(svgItem).addClass('-animation-init');
+	function initSvgAnimation() {
+		function svgAnimation(svgItem, duration) {
+			$(svgItem).addClass('-animation-init');
 
-		new Vivus(svgItem, {
-			duration: duration,
-			type: 'oneByOne'
-		});
-	}
-
-	function svgAnimationOnScroll() {
-		var svgItem = $('.js-svg-animation-item');
-
-		if (svgItem.length) {
-			svgItem.waypoint({
-				handler: function() {
-					if (!this.element.svgAnimationInit) {
-						this.element.svgAnimationInit = true;
-
-						svgAnimation(this.element, 300)
-					}
-				},
-				offset: '80%'
-			})
+			new Vivus(svgItem, {
+				duration: duration,
+				type: 'oneByOne'
+			});
 		}
+
+		function svgAnimationOnScroll() {
+			var svgItem = $('.js-svg-animation-item');
+
+			if (svgItem.length) {
+				svgItem.waypoint({
+					handler: function() {
+						if (!this.element.svgAnimationInit) {
+							this.element.svgAnimationInit = true;
+
+							svgAnimation(this.element, 300)
+						}
+					},
+					offset: '80%'
+				})
+			}
+		}
+
+		svgAnimationOnScroll();
 	}
 
-	svgAnimationOnScroll();
+	initSvgAnimation();
 
 	// =========================
 	// COUNT UP =================================
 	// =========================
 
-	function countUpNumbers(countUpItem, duration) {
-		var countNumber = $(countUpItem).attr('data-count-number'),
-				numbersAfterComma = 0;
+	function initCountUp() {
+		function countUpNumbers(countUpItem, duration) {
+			var countNumber = $(countUpItem).attr('data-count-number'),
+					numbersAfterComma = 0;
 
-		if (countNumber.indexOf('.') > 0) {
-			numbersAfterComma = countNumber.length - (countNumber.indexOf('.') + 1);
+			if (countNumber.indexOf('.') > 0) {
+				numbersAfterComma = countNumber.length - (countNumber.indexOf('.') + 1);
+			}
+
+			var options = {
+				startVal: 0,
+				decimalPlaces: numbersAfterComma,
+				duration: duration/1000,
+				useEasing: true,
+				decimal: '.',
+				suffix: '%'
+			};
+
+			new countUp.CountUp(countUpItem, countNumber, options).start();
 		}
 
-		var options = {
-			useEasing: true,
-			decimal: '.',
-			suffix: '%'
-		};
+		function countUpNumbersOnScroll() {
+			var countUpItem = $('.js-count-up-item');
 
-		new CountUp(countUpItem, 0, countNumber, numbersAfterComma, duration/1000, options).start();
-	}
+			if (countUpItem.length) {
+				countUpItem.waypoint({
+					handler: function() {
+						if (!this.element.countUpInit) {
+							this.element.countUpInit = true;
 
-	function countUpNumbersOnScroll() {
-		var countUpItem = $('.js-count-up-item');
-
-		if (countUpItem.length) {
-			countUpItem.waypoint({
-				handler: function() {
-					if (!this.element.countUpInit) {
-						this.element.countUpInit = true;
-
-						countUpNumbers(this.element, 4000);
-					}
-				},
-				offset: '80%'
-			})
+							countUpNumbers(this.element, 8000);
+						}
+					},
+					offset: '80%'
+				})
+			}
 		}
+
+		countUpNumbersOnScroll();
 	}
 
-	countUpNumbersOnScroll();
+	initCountUp();
 
 	// =========================
 	// PROGRESS BARS =================================
 	// =========================
 
-	function progressBars(progressBarsBlock, duration) {
-		var progressBarItem = $(progressBarsBlock).find('.js-progress-bar-item');
+	function initProgressBars() {
+		function progressBars(progressBarsBlock, duration) {
+			var progressBarItem = $(progressBarsBlock).find('.js-progress-bar-item');
 
-		progressBarItem.each(function() {
-			var progressBarsFillItem = $(this).find('.js-progress-bar-strip'),
-					progressBarsCountUpItem = $(this).find('.js-progress-bar-percent'),
-					progressBarPercent = progressBarsCountUpItem.attr('data-progress-percent');
+			progressBarItem.each(function() {
+				var progressBarsFillItem = $(this).find('.js-progress-bar-strip'),
+						progressBarsCountUpItem = $(this).find('.js-progress-bar-percent'),
+						progressBarPercent = progressBarsCountUpItem.attr('data-progress-percent');
 
-			// progress bar fill animation
-			progressBarsFillItem.animate({
-				width: progressBarPercent + '%'
-			}, duration, 'swing');
+				// progress bar fill animation
+				progressBarsFillItem.animate({
+					width: progressBarPercent + '%'
+				}, duration, 'swing');
 
-			// count up animation
-			var options = {
-				useEasing: false,
-				decimal: '.',
-				suffix: '%'
-			};
+				// find amount of numbers after the decimal point
+				var numbersAfterComma = 0;
 
-			// find amount of numbers after the decimal point
-			var numbersAfterComma = 0;
+				if (progressBarPercent.indexOf('.') > 0) {
+					numbersAfterComma = progressBarPercent.length - (progressBarPercent.indexOf('.') + 1);
+				}
 
-			if (progressBarPercent.indexOf('.') > 0) {
-				numbersAfterComma = progressBarPercent.length - (progressBarPercent.indexOf('.') + 1);
-			}
+				// count up animation
+				var options = {
+					useEasing: false,
+					decimal: '.',
+					decimalPlaces: numbersAfterComma,
+					duration: duration/1000,
+					suffix: '%'
+				};
 
-			var countUpElement = progressBarsCountUpItem.get(0),
-					numAnim = new CountUp(countUpElement, 0, progressBarPercent, numbersAfterComma, duration/1000, options);
-
-			numAnim.start();
-		});
-	}
-
-	function progressBarsOnScroll() {
-		var progressBarsBlock = $('.js-progress-bars');
-
-		if (progressBarsBlock.length) {
-			progressBarsBlock.waypoint({
-				handler: function() {
-					if (!this.element.progressBarsInit) {
-						this.element.progressBarsInit = true;
-
-						progressBars(this.element, 4000);
-					}
-				},
-				offset: '80%'
-			})
+				new countUp.CountUp(progressBarsCountUpItem.get(0), progressBarPercent, options).start();
+			});
 		}
+
+		function progressBarsOnScroll() {
+			var progressBarsBlock = $('.js-progress-bars');
+
+			if (progressBarsBlock.length) {
+				progressBarsBlock.waypoint({
+					handler: function() {
+						if (!this.element.progressBarsInit) {
+							this.element.progressBarsInit = true;
+
+							progressBars(this.element, 4000);
+						}
+					},
+					offset: '80%'
+				})
+			}
+		}
+
+		progressBarsOnScroll();
 	}
 
-	progressBarsOnScroll();
+	initProgressBars();
 
 	// =========================
 	// SHUFFLE FILTER =================================
 	// =========================
 
-	function filterInit() {
+	function initFilter() {
 		var filterContainer = $('.js-filter-container');
 
 		if (filterContainer.length) {
@@ -188,105 +237,107 @@ $(document).ready(function() {
 		}
 	}
 
-	filterInit();
+	initFilter();
 
 	// =========================
-	// SMALL HEADER AFTER SCROLL =================================
+	// ACTIVE HEADER AFTER SCROLL =================================
 	// =========================
 
-	function smallHeaderAfterScroll(distanceY) {
+	function initActiveHeaderAfterScroll() {
 		var header = $('.js-header');
 
 		$(window).on('scroll', function() {
-			if ($(this).scrollTop() > distanceY) {
-				header.addClass('-small-header');
+			if ($(this).scrollTop() > 10) {
+				header.addClass('-active');
 			} else {
-				header.removeClass('-small-header');
+				header.removeClass('-active');
 			}
 		});
 
-		if ($(document).scrollTop() > distanceY) {
-			header.addClass('-small-header');
+		if ($(document).scrollTop() > 10) {
+			header.addClass('-active');
 		}
 	}
 
-	smallHeaderAfterScroll(1);
+	initActiveHeaderAfterScroll();
 
 	// =========================
 	// STICKY FOOTER =================================
 	// =========================
 
-	function stickyFooter() {
+	function initStickyFooter() {
 		// 1) height of footer
 		var footerHeight = $('.js-footer').outerHeight();
 
 		// 2) compensation
-		$('.js-wrap-for-sticky').css({
-			'padding-bottom': footerHeight
-		});
+		$('.js-wrap-for-sticky').css('padding-bottom', footerHeight);
 	}
 
-	stickyFooter();
+	initStickyFooter();
 
 	$(window).on('resize', function() {
-		stickyFooter();
+		initStickyFooter();
 	});
 
 	// =========================
 	// SCROLL TOP BUTTON =================================
 	// =========================
 
-	function showHideScrollTopBtn(distance) {
-		var scrollTopBtn = $('.js-scroll-top-btn');
+	function initScrollTopBtn() {
+		function showHideScrollTopBtn(distance) {
+			var scrollTopBtn = $('.js-scroll-top-btn');
 
-		$(window).on('scroll', function() {
-			if ($(this).scrollTop() > distance) {
-				scrollTopBtn.addClass('-show');
-			} else {
-				scrollTopBtn.removeClass('-show');
-			}
-		});
+			$(window).on('scroll', function() {
+				if ($(this).scrollTop() > distance) {
+					scrollTopBtn.addClass('-show');
+				} else {
+					scrollTopBtn.removeClass('-show');
+				}
+			});
 
-		if ($(document).scrollTop() > distance) scrollTopBtn.addClass('-show');
-	}
+			if ($(document).scrollTop() > distance) scrollTopBtn.addClass('-show');
+		}
 
-	function scrollTopAnimation() {
-		var scrollTopBtn = $('.js-scroll-top-btn'),
-				scrollingComplete = true;
-
-		scrollTopBtn.on('click', function() {
-
-			if (scrollingComplete) {
-				scrollingComplete = false;
-
-				$('body, html').animate({
-					scrollTop: 0
-				}, 1000 ).promise().done(function() {
+		function scrollTopAnimation() {
+			var scrollTopBtn = $('.js-scroll-top-btn'),
 					scrollingComplete = true;
-				});
 
-				return false;
-			}
-		});
+			scrollTopBtn.on('click', function() {
+
+				if (scrollingComplete) {
+					scrollingComplete = false;
+
+					$('body, html').animate({
+						scrollTop: 0
+					}, 1000 ).promise().done(function() {
+						scrollingComplete = true;
+					});
+
+					return false;
+				}
+			});
+		}
+
+		function scrollTopBtn() {
+			// 1) checking the distance from the top of the page
+			showHideScrollTopBtn(100);
+			// 2) сlick event to scroll top
+			scrollTopAnimation();
+		}
+
+		scrollTopBtn();
 	}
 
-	function scrollTopBtn() {
-		// 1) checking the distance from the top of the page
-		showHideScrollTopBtn(100);
-		// 2) сlick event to scroll top
-		scrollTopAnimation();
-	}
-
-	scrollTopBtn();
+	initScrollTopBtn();
 
 	// =========================
-	// SCROLL TO ELEMENT =================================
+	// SMOOTH ANCHOR LINKS =================================
 	// =========================
 
-	function scrollToElement() {
+	function initSmoothAnchorLinks() {
 		var animationComplete = true;
 
-		$('a[href^="#"]:not(.js-no-scroll)').on('click', function(e) {
+		$('a[href^="#"]:not([href="#"]):not(.js-no-scroll)').on('click', function(e) {
 			e.preventDefault();
 
 			// height of header (for offset)
@@ -311,23 +362,21 @@ $(document).ready(function() {
 		});
 	}
 
-	scrollToElement();
+	initSmoothAnchorLinks();
 
 	// =========================
 	// WIDTH OF SCROLLBAR =================================
 	// =========================
-
-	var widthOfScrollbar;
 
 	function getScrollBarWidth() {
 		if (window.innerWidth > $(window).width()) {
 			var $outer = $('<div>').css({visibility: 'hidden', width: 100, overflow: 'scroll'}).appendTo('body'),
 					widthWithScroll = $('<div>').css({width: '100%'}).appendTo($outer).outerWidth();
 			$outer.remove();
-			widthOfScrollbar = 100 - widthWithScroll;
+			window.widthOfScrollbar = 100 - widthWithScroll;
 			return 100 - widthWithScroll;
 		} else {
-			return widthOfScrollbar = 0;
+			return window.widthOfScrollbar = 0;
 		}
 	}
 
@@ -338,7 +387,7 @@ $(document).ready(function() {
 	});
 
 	function addScrollbarCompensation(element) {
-		element.css('padding-right', widthOfScrollbar);
+		element.css('padding-right', window.widthOfScrollbar);
 	}
 
 	function removeScrollbarCompensation(element) {
@@ -359,12 +408,13 @@ $(document).ready(function() {
 
 		if (!mapBlock.length) return;
 
-		var coordinates = new google.maps.LatLng(40.712348, -74.006720),
-		zoom = 12;
+		var coordinateX = mapBlock.attr('data-coordinate-x'),
+				coordinateY = mapBlock.attr('data-coordinate-y'),
+				coordinates = new google.maps.LatLng(coordinateX, coordinateY);
 
 		var map = new google.maps.Map(mapBlock.get(0), {
 			center: coordinates,
-			zoom: zoom,
+			zoom: 12,
 			disableDefaultUI: true,
 			zoomControl: true,
 			fullscreenControl: true,
@@ -516,12 +566,13 @@ $(document).ready(function() {
 
 		if (!mapBlock.length) return;
 
-		var coordinates = new google.maps.LatLng(40.709541, -74.007984),
-		zoom = 16;
+		var coordinateX = mapBlock.attr('data-coordinate-x'),
+				coordinateY = mapBlock.attr('data-coordinate-y'),
+				coordinates = new google.maps.LatLng(coordinateX, coordinateY);
 
 		var map = new google.maps.Map(mapBlock.get(0), {
 			center: coordinates,
-			zoom: zoom,
+			zoom: 12,
 			disableDefaultUI: true,
 			zoomControl: false,
 			fullscreenControl: false,
@@ -599,61 +650,83 @@ $(document).ready(function() {
 	// YOUTUBE THUMBNAIL =================================
 	// =========================
 
-	function getYouTubeVideoId(videoItem) {
-		var videoThumbnailUrl = videoItem.find('.js-youtube-thumbnail-media').attr('style');
+	function initYouTubeThumbnail() {
+		function getYouTubeVideoId(videoItem) {
+			var videoThumbnailUrl = videoItem.find('.js-youtube-thumbnail-media').attr('style');
 
-		return videoThumbnailUrl.split('/')[videoThumbnailUrl.split('/').length - 2];
+			return videoThumbnailUrl.split('/')[videoThumbnailUrl.split('/').length - 2];
+		}
+
+		function insertYouTubeIframe() {
+			$('.js-youtube-thumbnail').on('click', function() {
+				var youTubeIframe = $('<iframe class="youtube-thumbnail__media" allowfullscreen></iframe>');
+						youTubeIframe.attr('allow', 'autoplay');
+						youTubeIframe.attr('src', 'https://www.youtube.com/embed/' + getYouTubeVideoId($(this)) + '?rel=0&showinfo=0&autoplay=1');
+
+				$(this).find('.js-youtube-thumbnail-media').remove();
+				$(this).append(youTubeIframe);
+			})
+		}
+
+		insertYouTubeIframe();
 	}
 
-	function insertYouTubeIframe() {
-		$('.js-youtube-thumbnail').on('click', function() {
-			var youTubeIframe = $('<iframe class="youtube-thumbnail__media" allowfullscreen></iframe>');
-					youTubeIframe.attr('allow', 'autoplay');
-					youTubeIframe.attr('src', 'https://www.youtube.com/embed/' + getYouTubeVideoId($(this)) + '?rel=0&showinfo=0&autoplay=1');
-
-			$(this).find('.js-youtube-thumbnail-media').remove();
-			$(this).append(youTubeIframe);
-		})
-	}
-
-	insertYouTubeIframe();
+	initYouTubeThumbnail();
 
 	// =========================
 	// VIMEO THUMBNAIL =================================
 	// =========================
 
-	function getVimeoVideoId(vimeoBlock) {
-		return vimeoBlock.attr('data-vimeo-url').split('/').pop();
+	function initVimeoThumbnail() {
+		function getVimeoVideoId(vimeoBlock) {
+			return vimeoBlock.attr('data-vimeo-url').split('/').pop();
+		}
+
+		function setVimeoThumbnailBackground(vimeoBlock) {
+			$.getJSON('https://vimeo.com/api/v2/video/' + getVimeoVideoId(vimeoBlock) + '.json', function (data) {
+				var thumbnailImg = data[0].thumbnail_large;
+
+				vimeoBlock.find('.js-vimeo-thumbnail-media').css('background-image', 'url(' + thumbnailImg + ')');
+			});
+		}
+
+		function setVimeoThumbnailBackgroundToAllBlocks() {
+			$('.js-vimeo-thumbnail').each(function() {
+				setVimeoThumbnailBackground($(this));
+			});
+		}
+
+		setVimeoThumbnailBackgroundToAllBlocks();
+
+		function insertVimeoIframe() {
+			$('.js-vimeo-thumbnail').on('click', function() {
+				var vimeoIframe = $('<iframe class="vimeo-thumbnail__media" allowfullscreen></iframe>');
+						vimeoIframe.attr('allow', 'autoplay');
+						vimeoIframe.attr('src', 'https://player.vimeo.com/video/' + getVimeoVideoId($(this)) + '?autoplay=1');
+
+				$(this).find('.js-vimeo-thumbnail-media').remove();
+				$(this).append(vimeoIframe);
+			})
+		}
+
+		insertVimeoIframe();
 	}
 
-	function setVimeoThumbnailBackground(vimeoBlock) {
-		$.getJSON('https://www.vimeo.com/api/v2/video/' + getVimeoVideoId(vimeoBlock) + '.json?callback=?', { format: 'json' }, function (data) {
-			var thumbnailImg = data[0].thumbnail_large;
-			vimeoBlock.find('.js-vimeo-thumbnail-media').css('background-image', 'url(' + thumbnailImg + ')');
-		});
+	initVimeoThumbnail();
+
+	// =========================
+	// BACKGROUND VIDEO =================================
+	// =========================
+
+	function initBackgroundVideo() {
+		if ($('.js-html-bg-video').length) {
+			$('.js-html-bg-video').bgVideo({
+				showPausePlay: false,
+				pauseAfter: 0
+			});
+		}
 	}
 
-	function setVimeoThumbnailBackgroundToAllBlocks() {
-		$('.js-vimeo-thumbnail').each(function() {
-			setVimeoThumbnailBackground($(this));
-		});
-	}
-
-	setVimeoThumbnailBackgroundToAllBlocks();
-
-	function insertVimeoIframe() {
-		$('.js-vimeo-thumbnail').on('click', function() {
-			var vimeoIframe = $('<iframe class="vimeo-thumbnail__media" allowfullscreen></iframe>');
-					vimeoIframe.attr('allow', 'autoplay');
-					vimeoIframe.attr('src', 'https://player.vimeo.com/video/' + getVimeoVideoId($(this)) + '?autoplay=1');
-
-			$(this).find('.js-vimeo-thumbnail-media').remove();
-			$(this).append(vimeoIframe);
-		})
-	}
-
-	insertVimeoIframe();
-
-});
+	initBackgroundVideo();
 
 }(jQuery));
